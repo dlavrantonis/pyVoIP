@@ -401,6 +401,7 @@ class VoIPPhone:
         port: int,
         username: str,
         password: str,
+        cancel_callback,
         bind_ip="0.0.0.0",
         bind_port=5060,
         transport_mode=SIP.TransportMode.UDP,
@@ -426,6 +427,7 @@ class VoIPPhone:
         self.bind_ip = bind_ip
         self.username = username
         self.password = password
+        self.cancel_callback = cancel_callback
         self.call_callback = call_callback
         self._status = PhoneStatus.INACTIVE
         self.transport_mode = transport_mode
@@ -466,6 +468,8 @@ class VoIPPhone:
                 self._callback_RESP_NotFound(request)
             elif request.status == SIP.SIPStatus.SERVICE_UNAVAILABLE:
                 self._callback_RESP_Unavailable(request)
+            elif request.method == "CANCEL":
+                self.cancel_callback()
 
     def get_status(self) -> PhoneStatus:
         return self._status
