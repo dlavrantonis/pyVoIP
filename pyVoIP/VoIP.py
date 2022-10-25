@@ -461,6 +461,8 @@ class VoIPPhone:
                 self._callback_MSG_Bye(request)
             elif request.method == "OPTIONS":
                 return self._callback_MSG_Options(request)
+            elif request.method == "CANCEL":
+                self.cancel_callback()
         else:
             if request.status == SIP.SIPStatus.OK:
                 self._callback_RESP_OK(request)
@@ -468,8 +470,7 @@ class VoIPPhone:
                 self._callback_RESP_NotFound(request)
             elif request.status == SIP.SIPStatus.SERVICE_UNAVAILABLE:
                 self._callback_RESP_Unavailable(request)
-            elif request.method == "CANCEL":
-                self.cancel_callback()
+
 
     def get_status(self) -> PhoneStatus:
         return self._status
